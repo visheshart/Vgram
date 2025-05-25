@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>vgram</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fafafa;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: white;
+      border-bottom: 1px solid #dbdbdb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #262626;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: #262626;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    main#feed {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .post {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      margin-bottom: 20px;
+      border: 1px solid #dbdbdb;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .post iframe {
+      width: 100%;
+      height: 350px;
+      border: none;
+    }
+
+    @media screen and (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav a {
+        margin: 5px 10px 0 0;
+      }
+
+      .post iframe {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">vgram</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Explore</a>
+      <a href="#">Profile</a>
+    </nav>
+  </header>
+
+  <main id="feed">
+    <!-- Video Post 1 -->
+    <div class="post">
+      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
+    </div>
+
+    <!-- Video Post 2 -->
+    <div class="post">
+      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
+    </div>
+
+    <!-- Video Post 3 -->
+    <div class="post">
+      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
+    </div>
+  </main>
+</body>
+</html>
