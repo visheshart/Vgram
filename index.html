@@ -1,110 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>vgram</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fafafa;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background: white;
-      border-bottom: 1px solid #dbdbdb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #262626;
-    }
-
-    nav a {
-      margin-left: 20px;
-      color: #262626;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    main#feed {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .post {
-      width: 100%;
-      max-width: 600px;
-      background: white;
-      margin-bottom: 20px;
-      border: 1px solid #dbdbdb;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
-    .post iframe {
-      width: 100%;
-      height: 350px;
-      border: none;
-    }
-
-    @media screen and (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav a {
-        margin: 5px 10px 0 0;
-      }
-
-      .post iframe {
-        height: 250px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vgram - Video Instagram</title>
+    <style>
+        :root {
+            --primary: #833ab4;
+            --secondary: #fd1d1d;
+            --tertiary: #fcb045;
+            --bg: #fafafa;
+            --card-bg: #ffffff;
+            --text: #262626;
+            --border: #dbdbdb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+        
+        .header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--tertiary));
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            background: #000;
+        }
+        
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-info {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--tertiary));
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .username {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Funky animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .logo {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .video-card:nth-child(odd) {
+            border: 2px solid var(--primary);
+        }
+        
+        .video-card:nth-child(even) {
+            border: 2px solid var(--secondary);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">vgram</div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Explore</a>
-      <a href="#">Profile</a>
-    </nav>
-  </header>
-
-  <main id="feed">
-    <!-- Video Post 1 -->
-    <div class="post">
-      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
+    <header class="header">
+        <div class="logo">VGRAM</div>
+    </header>
+    
+    <div class="container">
+        <div class="video-grid" id="videoGrid">
+            <!-- Videos will be loaded here -->
+            <div class="loading">Loading awesome videos...</div>
+        </div>
     </div>
-
-    <!-- Video Post 2 -->
-    <div class="post">
-      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
-    </div>
-
-    <!-- Video Post 3 -->
-    <div class="post">
-      <iframe src="https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/preview" allow="autoplay" allowfullscreen></iframe>
-    </div>
-  </main>
+    
+    <script>
+        // Convert Google Drive links to embeddable format
+        function convertToEmbedLink(url) {
+            const fileId = url.match(/\/file\/d\/([^\/]+)/)[1];
+            return `https://drive.google.com/uc?export=download&id=${fileId}`;
+        }
+        
+        // Video data with Google Drive links
+        const videoLinks = [
+            "https://drive.google.com/file/d/1Z_0dBzpfDXchP04NfmxHog1A1oWSo_7E/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1YCVdGL10cbdFNmr8HG7h2W9Ih5Zjfxji/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1BKznKea1vz7Ucya6CUYibzMw21ubdY4n/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1N27G38WpvP5ph8s88M9IdSnNxFUhMEE7/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1hGtnAtNsZ9X1eDjCJ1uUeV002eVTAY0I/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1qGe2A23_32_iA8PBk7SXQS_DoJIuPeg5/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1llOaQE0-A-UYEt3mEt9GeMRyW_yeFSp4/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1WOeR6W4Ez8sqfu94dEWyH6D4amuoQuqf/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1nmBNAJZE1NZcBeE7K3538b_A5KPe9zak/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1x_2XmdjkkErhTy78S3WNO1CZpOD6LdRo/view?usp=drivesdk",
+            "https://drive.google.com/file/d/10Dm7eW8KzG0HG5M2u7jdXrsCGq0kBx56/view?usp=drivesdk",
+            "https://drive.google.com/file/d/15VE3YzzFHn9VYltqHAEoNodh0A59hE_c/view?usp=drivesdk",
+            "https://drive.google.com/file/d/12NYoDV7bKMgMNgPgDNhrP5yJuAlsG2fH/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1hUXxZoMZFmKVdkOiudQNPNOz_-L5Z5gh/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1afJbur-cTfygXUlBQUkN7yhbQVZB_ff3/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1f3rdFhCa__LdMIKgBz_M7b3GSovb5v24/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1iNFSKu8u63j2f-Ww3UDCymvY7vNFTI-V/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1hKeNwCg5ueSxuSY3TNoOe0NqM40sEnBX/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1fWt4hpFo0-FieS76tO_hK-efQJriU6vT/view?usp=drivesdk",
+            "https://drive.google.com/file/d/1ObJT0Y6PWVCyPvmryP6rY9o2KhdIfBtx/view?usp=drivesdk"
+        ];
+        
+        // Generate random usernames
+        const usernames = [
+            "funky_vibes", "video_lover", "cool_cat", "digital_dreamer", 
+            "neon_nights", "pixel_pusher", "glitch_guru", "vibe_curator",
+            "retro_runner", "cyber_surfer", "hologram_hero", "synth_wizard"
+        ];
+        
+        // Display videos
+        const videoGrid = document.getElementById('videoGrid');
+        videoGrid.innerHTML = ''; // Clear loading message
+        
+        videoLinks.forEach((link, index) => {
+            const embedLink = convertToEmbedLink(link);
+            const randomUser = usernames[Math.floor(Math.random() * usernames.length)];
+            const firstLetter = randomUser.charAt(0).toUpperCase();
+            
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            videoCard.innerHTML = `
+                <div class="video-container">
+                    <video controls loop muted>
+                        <source src="${embedLink}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="user-avatar">${firstLetter}</div>
+                    <div class="username">${randomUser}</div>
+                </div>
+            `;
+            
+            videoGrid.appendChild(videoCard);
+        });
+        
+        // Add lazy loading for videos
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target.querySelector('video');
+                    if (video) {
+                        video.setAttribute('src', video.getAttribute('data-src'));
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { rootMargin: '100px' });
+        
+        document.querySelectorAll('.video-container').forEach(container => {
+            const video = container.querySelector('video');
+            if (video) {
+                video.setAttribute('data-src', video.getAttribute('src'));
+                video.removeAttribute('src');
+                observer.observe(container);
+            }
+        });
+    </script>
 </body>
 </html>
